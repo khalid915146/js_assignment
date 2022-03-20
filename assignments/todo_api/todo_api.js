@@ -1,37 +1,40 @@
-const compBtn = document.querySelector('button#complete');
-const pendBtn = document.querySelector('button#pending');
-const allTask = document.querySelector('button#all');
-const todoList = document.querySelector('div.todos');
+const allTaskButton = document.querySelector('.all_task');
+const completedButton = document.querySelector('.completed_task');
+const pendingButton = document.querySelector('.pending_task');
+const todoList = document.querySelector('.todo_task');
+
 fetchtodo();
+
 async function fetchtodo(){
-    let res=await fetch('https://jsonplaceholder.typicode.com/todos');
-    let data=await res.json();
-    allTask.addEventListener("click", () => {
-        loadItems(data);
+    let result=await fetch('https://jsonplaceholder.typicode.com/todos');
+    let fetched_data=await result.json();
+    allTaskButton.addEventListener("click", () => {
+        loadItems(fetched_data);
         });
-    compBtn.addEventListener("click", () => {
-        let completedTodoList = data.filter(ele => ele.completed);
+    completedButton.addEventListener("click", () => {
+        let completedTodoList = fetched_data.filter(element => element.completed);
         loadItems(completedTodoList);
     });
-    pendBtn.addEventListener("click", () => {
-        let pendingTodoList = data.filter(ele => !ele.completed);
+    pendingButton.addEventListener("click", () => {
+        let pendingTodoList = fetched_data.filter(element => !element.completed);
         loadItems(pendingTodoList);
     });
 }
-function loadItems(data){
-        let output='';
-    data.forEach((todo) => {
-        let trig
-        if (todo.completed) {
-            trig = "True"
+
+function loadItems(fetched_data){
+        let filtered_result='';
+    fetched_data.forEach((task) => {
+        let trigger
+        if (task.completed) {
+            trigger = "COMPLETED"
         }
         else {
-            trig = "False"
+            trigger = "PENDING"
         }
-        output+=`<div class="whole_value">
-                <h4>${todo.title}</h4>
-                <p >UserId : ${todo.userId}</p>
-                <p >ID : ${todo.id}</p>
-                <p >Status : ${trig}</p>
+        filtered_result+=`<div class="whole_value">
+                <h4>${task.title}</h4>
+                <p >UserId : ${task.userId}</p>
+                <p >ID : ${task.id}</p>
+                <p >Status : ${trigger}</p>
                 </div>`
-}); todoList.innerHTML=output;}
+}); todoList.innerHTML=filtered_result;}
